@@ -12,7 +12,7 @@ export class PostService {
 
   constructor(private http: HttpClient) { }
 
-  public getPosts(term: string): Observable<{ posts: Post[], count: number }> {
+  public getPosts(search): Observable<{ posts: Post[], count: number }> {
     const httpOptions = {
       headers: new HttpHeaders({
         'accept': 'application/json',
@@ -20,8 +20,8 @@ export class PostService {
       })
     };
 
-    let valueUrl = `${environment.searchUrl}?api-version=2017-11-11&$orderby=Timestamp desc&$top=50&search=${ term || '*'}`;
-    let countUrl = `${environment.searchUrl}/$count?api-version=2017-11-11&$orderby=Timestamp desc&$top=50&search=${ term || '*'}`;
+    let valueUrl = `${environment.searchUrl}?api-version=2017-11-11&$orderby=Timestamp desc&$top=10&$skip=${Math.max(0, search.page * 10)}&search=${ search.term || '*'}`;
+    let countUrl = `${environment.searchUrl}/$count?api-version=2017-11-11&$orderby=Timestamp desc&search=${ search.term || '*'}`;
 
     let valueObs = this.http.get<IOdata<Post>>(valueUrl, httpOptions);
     let countObs = this.http.get<number>(countUrl, httpOptions);
