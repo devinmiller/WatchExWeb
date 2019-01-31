@@ -20,14 +20,10 @@ export class PostService {
       })
     };
 
-    let valueUrl = `${environment.searchUrl}?api-version=2017-11-11&$orderby=Timestamp desc&$top=10&$skip=${Math.max(0, search.page * 10)}&search=${ search.term || '*'}`;
-    let countUrl = `${environment.searchUrl}/$count?api-version=2017-11-11&$orderby=Timestamp desc&search=${ search.term || '*'}`;
+    let valueUrl = `${environment.searchUrl}?api-version=2017-11-11&$count=true&$orderby=Timestamp desc&$top=10&$skip=${Math.max(0, search.page * 10)}&search=${ search.term || '*'}`;
 
-    let valueObs = this.http.get<IOdata<Post>>(valueUrl, httpOptions);
-    let countObs = this.http.get<number>(countUrl, httpOptions);
-
-    return zip(valueObs, countObs).pipe(
-      map(([odata, count]) => ({ posts: odata.value, count: count }))
+    return this.http.get<IOdata<Post>>(valueUrl, httpOptions).pipe(
+      map(response => ({ posts: response.value, count: response["@odata.count"]}))
     );
   }
 }

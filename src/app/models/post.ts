@@ -9,5 +9,6 @@ export class Post {
     Stickied:boolean;
     Timestamp:Date;
     Title:string;
-    Url:string;
+    HasThumbnail:boolean;
+    HasPreview:boolean;
 }

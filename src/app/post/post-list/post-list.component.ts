@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
-import { MatPaginator } from '@angular/material';
+import { MatPaginator, MatTableDataSource, PageEvent } from '@angular/material';
 
 import { PostService } from '../post.service';
 import { Post } from 'src/app/models';
@@ -13,7 +13,6 @@ import { Post } from 'src/app/models';
   styleUrls: ['./post-list.component.scss']
 })
 export class PostListComponent implements OnInit {
-  searchCtrl = new FormControl('');
   posts: Post[] = [];
   postTotal: number = 0;
 
@@ -22,16 +21,13 @@ export class PostListComponent implements OnInit {
   constructor(private postService: PostService) { }
 
   ngOnInit() {
-    this.search();
-
-    this.paginator.page.subscribe(x => this.search());
+    this.applyFilter();
   }
 
-  search() {
-    console.log('Search Called');
+  applyFilter(value?: string, pageEvent?: PageEvent) {
     let search = {
-      term: this.searchCtrl.value,
-      page: this.paginator.pageIndex
+      term: value,
+      page: pageEvent ? pageEvent.pageIndex : 0
     };
 
     this.postService.getPosts(search).subscribe(response => {
@@ -40,4 +36,9 @@ export class PostListComponent implements OnInit {
     });
   }
 
+  getThumbnail(post: Post): string {
+    return post.HasThumbnail ? 
+      `https://cotbwexdata01.blob.core.windows.net/images/${post.Id}_thumbnail.jpg` :
+      'https://via.placeholder.com/140.gif?text=No+Image';
+  }
 }

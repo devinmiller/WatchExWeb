@@ -1,4 +1,5 @@
 export interface IOdata<T> {
     '@odata.context': string;
-    value: T[]
+    '@odata.count': number;
+    value: T[];
 }
