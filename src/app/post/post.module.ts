@@ -7,9 +7,10 @@ import { MatTableModule, MatInputModule, MatIconModule, MatButtonModule, MatPagi
 import { PostRoutingModule } from './post-routing.module';
 import { PostListComponent } from './post-list/post-list.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { PostCollageComponent } from './post-collage/post-collage.component';
 
 @NgModule({
-  declarations: [PostListComponent],
+  declarations: [PostListComponent, PostCollageComponent],
   imports: [
     CommonModule,
     FormsModule,

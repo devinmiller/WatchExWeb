@@ -1,0 +1,20 @@
+<div>
+  <div fxLayout="row" fxLayoutAlign="center center">
+    <mat-form-field fxFlex="20">
+        <input matInput #filter (keyup.enter)="applyFilter(filter.value)" type="text" placeholder="Search Filter" />
+        <button mat-button matSuffix mat-icon-button (click)="applyFilter(filter.value)"> 
+          <mat-icon>search</mat-icon>
+        </button>
+        <button mat-button matSuffix mat-icon-button (click)="filter.value = ''; applyFilter();"> 
+          <mat-icon>close</mat-icon>
+        </button>
+    </mat-form-field>
+  </div>
+
+  <div fxLayout="row wrap" fxLayoutAlign="center center">
+    <div *ngFor="let post of posts">
+      <img fxFlex [src]="getPreview(post)" />
+      <!-- <img src="https://via.placeholder.com/240.gif?text=No+Image" /> -->
+    </div>
+  </div>
+</div>
