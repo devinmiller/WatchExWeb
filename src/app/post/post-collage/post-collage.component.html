@@ -11,10 +11,11 @@
     </mat-form-field>
   </div>
 
-  <div fxLayout="row wrap" fxLayoutAlign="center center">
-    <div *ngFor="let post of posts">
-      <img fxFlex [src]="getPreview(post)" />
+
+    <cdk-virtual-scroll-viewport class="photos">
+      <img *cdkVirtualFor="let post of posts" [src]="getPreview(post)" />
       <!-- <img src="https://via.placeholder.com/240.gif?text=No+Image" /> -->
-    </div>
-  </div>
+    </cdk-virtual-scroll-viewport>
+
+
 </div>

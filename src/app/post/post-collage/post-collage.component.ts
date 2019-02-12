@@ -26,14 +26,14 @@ export class PostCollageComponent implements OnInit {
       page: pageEvent ? pageEvent.pageIndex : 0
     };
 
-    this.postService.getPosts(search).subscribe(response => {
+    this.postService.getCollage(search).subscribe(response => {
       this.posts = response.posts;
       this.postTotal = response.count;
     });
   }
 
   getPreview(post: Post): string {
-    return post.HasThumbnail ? 
+    return post.HasPreview ? 
       `https://cotbwexdata01.blob.core.windows.net/images/${post.Id}_preview_source.jpg` :
       'https://via.placeholder.com/140.gif?text=No+Image';
   }

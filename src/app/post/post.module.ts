@@ -8,6 +8,7 @@ import { PostRoutingModule } from './post-routing.module';
 import { PostListComponent } from './post-list/post-list.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PostCollageComponent } from './post-collage/post-collage.component';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @NgModule({
   declarations: [PostListComponent, PostCollageComponent],
@@ -21,7 +22,8 @@ import { PostCollageComponent } from './post-collage/post-collage.component';
     MatInputModule,
     MatPaginatorModule,
     MatTableModule,
-    PostRoutingModule
+    PostRoutingModule,
+    ScrollingModule
   ]
 })
 export class PostModule { }
