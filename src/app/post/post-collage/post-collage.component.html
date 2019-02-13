@@ -12,10 +12,15 @@
   </div>
 
 
-    <cdk-virtual-scroll-viewport class="photos">
-      <img *cdkVirtualFor="let post of posts" [src]="getPreview(post)" />
-      <!-- <img src="https://via.placeholder.com/240.gif?text=No+Image" /> -->
-    </cdk-virtual-scroll-viewport>
+    <div fxLayout="row" cdk-scrollable>
+      <div *ngFor="let column of columns" fxFlex="20" fxLayout="column" fxLayoutAlign="none start">
+          <img *ngFor="let post of column" [src]="getPreview(post)" />
+      </div>
+    </div>
 
-
+    <div fxLayout="row" fxLayoutAlign="center center">
+        <button fxFlex="20" mat-button (click)="applyFilter(filter.value)"> 
+          Load More
+        </button>
+    </div>
 </div>

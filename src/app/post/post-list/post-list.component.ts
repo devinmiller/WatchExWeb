@@ -6,7 +6,6 @@ import { MatPaginator, MatTableDataSource, PageEvent } from '@angular/material';
 import { PostService } from '../post.service';
 import { Post } from 'src/app/models';
 
-
 @Component({
   selector: 'app-post-list',
   templateUrl: './post-list.component.html',

@@ -1,7 +1,8 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewChecked, AfterViewInit } from '@angular/core';
 import { Post } from 'src/app/models';
 import { MatPaginator, PageEvent } from '@angular/material';
 import { PostService } from '../post.service';
+import { ScrollDispatcher, CdkScrollable, ViewportRuler } from '@angular/cdk/overlay';
 
 @Component({
   selector: 'app-post-collage',
@@ -12,22 +13,50 @@ export class PostCollageComponent implements OnInit {
   posts: Post[] = [];
   postTotal: number = 0;
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  viewIndex = 0;
 
-  constructor(private postService: PostService) { }
+  columnMap = new Map<number, Post[]>();
+  columns: Array<Post[]>;
+  columnCount: number = 5;
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(CdkScrollable) scrollable: CdkScrollable;
+
+  constructor(
+    private scrollDispatcher: ScrollDispatcher,
+    private viewportRuler: ViewportRuler,
+    private postService: PostService) { }
 
   ngOnInit() {
+    this.columns = new Array<Post[]>(this.columnCount);
+
     this.applyFilter();
+
+    this.scrollDispatcher.register(this.scrollable);
+    this.scrollDispatcher.scrolled().subscribe(event => {
+      // console.log(this.viewportRuler.getViewportSize());
+      // console.log(this.viewportRuler.getViewportRect());
+      // console.log(this.viewportRuler.getViewportScrollPosition());
+    });
   }
 
-  applyFilter(value?: string, pageEvent?: PageEvent) {
+  applyFilter(value?: string, index?: number) {
     let search = {
       term: value,
-      page: pageEvent ? pageEvent.pageIndex : 0
+      page: index || this.viewIndex++
     };
 
+    console.log(this.columns);
+
     this.postService.getCollage(search).subscribe(response => {
-      this.posts = response.posts;
+      this.posts.push(...response.posts);
+
+      for (let i = this.columnCount - 1; i >= 0; i--) {
+        this.columns[i] = this.posts.filter((_, x) => x % this.columnCount === i);
+      }
+
+      console.log(this.columns);
+
       this.postTotal = response.count;
     });
   }
