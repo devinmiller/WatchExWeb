@@ -1,8 +1,9 @@
-import { Component, OnInit, ViewChild, AfterViewChecked, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewChecked, AfterViewInit, ViewChildren, ElementRef, QueryList } from '@angular/core';
 import { Post } from 'src/app/models';
 import { MatPaginator, PageEvent } from '@angular/material';
 import { PostService } from '../post.service';
 import { ScrollDispatcher, CdkScrollable, ViewportRuler } from '@angular/cdk/overlay';
+import { PostImageComponent } from '../post-image/post-image.component';
 
 @Component({
   selector: 'app-post-collage',
@@ -40,13 +41,22 @@ export class PostCollageComponent implements OnInit {
     });
   }
 
-  applyFilter(value?: string, index?: number) {
+  applyFilter(value?: string) {
+    this.posts = [];
+    this.viewIndex = 0;
+    this.getImages(value, this.viewIndex);
+  }
+
+  loadMore(value?: string) {
+    this.viewIndex++;
+    this.getImages(value, this.viewIndex);
+  }
+
+  private getImages(value?: string, index?: number) {
     let search = {
       term: value,
-      page: index || this.viewIndex++
+      page: index || 0
     };
-
-    console.log(this.columns);
 
     this.postService.getCollage(search).subscribe(response => {
       this.posts.push(...response.posts);
@@ -54,8 +64,6 @@ export class PostCollageComponent implements OnInit {
       for (let i = this.columnCount - 1; i >= 0; i--) {
         this.columns[i] = this.posts.filter((_, x) => x % this.columnCount === i);
       }
-
-      console.log(this.columns);
 
       this.postTotal = response.count;
     });
@@ -65,6 +73,10 @@ export class PostCollageComponent implements OnInit {
     return post.HasPreview ? 
       `https://cotbwexdata01.blob.core.windows.net/images/${post.Id}_preview_source.jpg` :
       'https://via.placeholder.com/140.gif?text=No+Image';
+  }
+
+  getPlaceholder(index: number) {
+    return `https://via.placeholder.com/140.gif?text=Image+${index}`;
   }
 
 }

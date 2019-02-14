@@ -12,14 +12,14 @@
   </div>
 
 
-    <div fxLayout="row" cdk-scrollable>
+    <div class="photos" fxLayout="row" cdk-scrollable>
       <div *ngFor="let column of columns" fxFlex="20" fxLayout="column" fxLayoutAlign="none start">
-          <img *ngFor="let post of column" [src]="getPreview(post)" />
+          <app-post-column [posts]="column"></app-post-column>
       </div>
     </div>
 
     <div fxLayout="row" fxLayoutAlign="center center">
-        <button fxFlex="20" mat-button (click)="applyFilter(filter.value)"> 
+        <button fxFlex="20" mat-button (click)="loadMore(filter.value)"> 
           Load More
         </button>
     </div>
