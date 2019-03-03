@@ -18,7 +18,7 @@ export class PostCollageComponent implements OnInit {
 
   columnMap = new Map<number, Post[]>();
   columns: Array<Post[]>;
-  columnCount: number = 5;
+  columnCount: number = 4;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(CdkScrollable) scrollable: CdkScrollable;
@@ -58,21 +58,21 @@ export class PostCollageComponent implements OnInit {
       page: index || 0
     };
 
-    this.postService.getCollage(search).subscribe(response => {
-      this.posts.push(...response.posts);
+    this.postService.getPosts(search).subscribe(response => {
+      this.posts.push(...response);
 
       for (let i = this.columnCount - 1; i >= 0; i--) {
         this.columns[i] = this.posts.filter((_, x) => x % this.columnCount === i);
       }
-
-      this.postTotal = response.count;
     });
   }
 
   getPreview(post: Post): string {
-    return post.HasPreview ? 
-      `https://cotbwexdata01.blob.core.windows.net/images/${post.Id}_preview_source.jpg` :
-      'https://via.placeholder.com/140.gif?text=No+Image';
+    var preview = post.images.find(p => p.width === 640);
+
+    return preview ? 
+      `https://cotbwexdata01.blob.core.windows.net/images/${post.id}_${post.redditId}_Resolution_${preview.width}_X_${preview.height}.jpg` :
+      'https://via.placeholder.com/640.gif?text=No+Image';
   }
 
   getPlaceholder(index: number) {

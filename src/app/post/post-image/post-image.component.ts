@@ -16,9 +16,13 @@ export class PostImageComponent implements OnInit {
   }
 
   getPreview = () => {
-    return this.post.HasPreview ? 
-      `https://cotbwexdata01.blob.core.windows.net/images/${this.post.Id}_preview_source.jpg` :
-      'https://via.placeholder.com/140.gif?text=No+Image';
+    var preview = this.post.images && this.post.images.find(p => p.width === 640 || p.width === 320);
+
+    if(!preview) console.log(this.post.id);
+
+    return preview ? 
+      `https://cotbwexdata01.blob.core.windows.net/images/${this.post.id}_${this.post.redditId}_Resolution_${preview.width}_X_${preview.height}.jpg` :
+      'https://via.placeholder.com/640.gif?text=No+Image';
   }
 
 }

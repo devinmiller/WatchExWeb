@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  searchUrl: 'https://default-search-svc.search.windows.net/indexes/wex-posts-index/docs'
+  searchUrl: 'https://wex-api.codeonthebrain.com/api/post'
 };
 
 /*

@@ -1,14 +1,17 @@
+import { Image } from './image';
+
 export class Post {
-    Id:string;
-    Author:string;
-    IsMeta:boolean;
-    IsSelf:boolean;
-    LinkFlairText:string;
-    Permalink:string;
-    Pinned:boolean;
-    Stickied:boolean;
-    Timestamp:Date;
-    Title:string;
-    HasThumbnail:boolean;
-    HasPreview:boolean;
+    id:string;
+    redditId:string;
+    author:string;
+    isMeta:boolean;
+    isSelf:boolean;
+    linkFlairText:string;
+    permalink:string;
+    pinned:boolean;
+    stickied:boolean;
+    timestamp:Date;
+    title:string;
+
+    images: Image[]
 }
