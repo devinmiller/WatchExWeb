@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  searchUrl: 'https://default-search-svc.search.windows.net/indexes/wex-posts-index/docs'
+  searchUrl: 'https://wex-api.codeonthebrain.com/api/post'
 };
