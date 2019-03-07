@@ -4,6 +4,7 @@ import { MatPaginator, PageEvent } from '@angular/material';
 import { PostService } from '../post.service';
 import { ScrollDispatcher, CdkScrollable, ViewportRuler } from '@angular/cdk/overlay';
 import { PostImageComponent } from '../post-image/post-image.component';
+import { PostColumnComponent } from '../post-column/post-column.component';
 
 @Component({
   selector: 'app-post-collage',
@@ -18,10 +19,12 @@ export class PostCollageComponent implements OnInit {
 
   columnMap = new Map<number, Post[]>();
   columns: Array<Post[]>;
-  columnCount: number = 4;
+  columnCount: number = 5;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(CdkScrollable) scrollable: CdkScrollable;
+
+  @ViewChildren(PostColumnComponent) postColumns: QueryList<PostColumnComponent>
 
   constructor(
     private scrollDispatcher: ScrollDispatcher,
@@ -29,9 +32,7 @@ export class PostCollageComponent implements OnInit {
     private postService: PostService) { }
 
   ngOnInit() {
-    this.columns = new Array<Post[]>(this.columnCount);
-
-    this.applyFilter();
+    this.columns = new Array<Post[]>(this.columnCount).fill([]);
 
     this.scrollDispatcher.register(this.scrollable);
     this.scrollDispatcher.scrolled().subscribe(event => {
@@ -41,13 +42,20 @@ export class PostCollageComponent implements OnInit {
     });
   }
 
+  ngAfterViewInit() {
+    this.applyFilter();
+  }
+
   applyFilter(value?: string) {
     this.posts = [];
     this.viewIndex = 0;
+
     this.getImages(value, this.viewIndex);
   }
 
   loadMore(value?: string) {
+    this.postColumns.forEach(x => console.log(x.getSourceHeight()))
+
     this.viewIndex++;
     this.getImages(value, this.viewIndex);
   }
@@ -67,16 +75,11 @@ export class PostCollageComponent implements OnInit {
     });
   }
 
-  getPreview(post: Post): string {
-    var preview = post.images.find(p => p.width === 640);
-
-    return preview ? 
-      `https://cotbwexdata01.blob.core.windows.net/images/${post.id}_${post.redditId}_Resolution_${preview.width}_X_${preview.height}.jpg` :
-      'https://via.placeholder.com/640.gif?text=No+Image';
+  private getShortestColumn(): PostColumnComponent[] {
+    return this.postColumns
+      .toArray()
+      .sort((x, y) => {
+        return x.getSourceHeight() - y.getSourceHeight();
+      });
   }
-
-  getPlaceholder(index: number) {
-    return `https://via.placeholder.com/140.gif?text=Image+${index}`;
-  }
-
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
-import { Post } from 'src/app/models';
+import { Post, Image } from 'src/app/models';
 
 @Component({
   selector: 'app-post-image',
@@ -9,19 +9,26 @@ import { Post } from 'src/app/models';
 export class PostImageComponent implements OnInit {
   @Input() post: Post;
 
+  @ViewChild('image') nativeImage: HTMLImageElement;
+
+  sourceImage: Image;
+
   constructor() { }
 
   ngOnInit() {
-    
+    console.log('PostImageComponent', 'ngOnInit');
+    let images = this.post.images
+      .filter(image => image.height <= 640)
+      .sort((x, y) => y.height - x.height);
+
+    if(images) {
+      this.sourceImage = images[0];
+    }
   }
 
   getPreview = () => {
-    var preview = this.post.images && this.post.images.find(p => p.width === 640 || p.width === 320);
-
-    if(!preview) console.log(this.post.id);
-
-    return preview ? 
-      `https://cotbwexdata01.blob.core.windows.net/images/${this.post.id}_${this.post.redditId}_Resolution_${preview.width}_X_${preview.height}.jpg` :
+    return this.sourceImage ? 
+      `https://cotbwexdata01.blob.core.windows.net/images/${this.post.id}_${this.post.redditId}_${this.sourceImage.imageType === 1 ? 'Resolution':'Source'}_${this.sourceImage.width}_X_${this.sourceImage.height}.jpg` :
       'https://via.placeholder.com/640.gif?text=No+Image';
   }
 
