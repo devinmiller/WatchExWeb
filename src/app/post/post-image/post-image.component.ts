@@ -9,14 +9,13 @@ import { Post, Image } from 'src/app/models';
 export class PostImageComponent implements OnInit {
   @Input() post: Post;
 
-  @ViewChild('image') nativeImage: HTMLImageElement;
+  @ViewChild('image') clientImage: ElementRef<HTMLImageElement>;
 
   sourceImage: Image;
 
   constructor() { }
 
   ngOnInit() {
-    console.log('PostImageComponent', 'ngOnInit');
     let images = this.post.images
       .filter(image => image.height <= 640)
       .sort((x, y) => y.height - x.height);
@@ -27,6 +26,7 @@ export class PostImageComponent implements OnInit {
   }
 
   getPreview = () => {
+    
     return this.sourceImage ? 
       `https://cotbwexdata01.blob.core.windows.net/images/${this.post.id}_${this.post.redditId}_${this.sourceImage.imageType === 1 ? 'Resolution':'Source'}_${this.sourceImage.width}_X_${this.sourceImage.height}.jpg` :
       'https://via.placeholder.com/640.gif?text=No+Image';

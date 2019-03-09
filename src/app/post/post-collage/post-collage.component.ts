@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, AfterViewChecked, AfterViewInit, ViewChildren, ElementRef, QueryList } from '@angular/core';
-import { Post } from 'src/app/models';
 import { MatPaginator, PageEvent } from '@angular/material';
+import { Post } from '../../models';
 import { PostService } from '../post.service';
 import { ScrollDispatcher, CdkScrollable, ViewportRuler } from '@angular/cdk/overlay';
 import { PostImageComponent } from '../post-image/post-image.component';
@@ -12,14 +12,14 @@ import { PostColumnComponent } from '../post-column/post-column.component';
   styleUrls: ['./post-collage.component.scss']
 })
 export class PostCollageComponent implements OnInit {
-  posts: Post[] = [];
-  postTotal: number = 0;
+  posts: Post[];
 
   viewIndex = 0;
 
-  columnMap = new Map<number, Post[]>();
+  targetWidth: number = 960;
+
   columns: Array<Post[]>;
-  columnCount: number = 5;
+  columnCount: number = 3;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(CdkScrollable) scrollable: CdkScrollable;
@@ -32,7 +32,7 @@ export class PostCollageComponent implements OnInit {
     private postService: PostService) { }
 
   ngOnInit() {
-    this.columns = new Array<Post[]>(this.columnCount).fill([]);
+    this.reset();
 
     this.scrollDispatcher.register(this.scrollable);
     this.scrollDispatcher.scrolled().subscribe(event => {
@@ -40,22 +40,16 @@ export class PostCollageComponent implements OnInit {
       // console.log(this.viewportRuler.getViewportRect());
       // console.log(this.viewportRuler.getViewportScrollPosition());
     });
-  }
 
-  ngAfterViewInit() {
     this.applyFilter();
   }
 
   applyFilter(value?: string) {
-    this.posts = [];
-    this.viewIndex = 0;
-
+    this.reset();
     this.getImages(value, this.viewIndex);
   }
 
   loadMore(value?: string) {
-    this.postColumns.forEach(x => console.log(x.getSourceHeight()))
-
     this.viewIndex++;
     this.getImages(value, this.viewIndex);
   }
@@ -69,17 +63,34 @@ export class PostCollageComponent implements OnInit {
     this.postService.getPosts(search).subscribe(response => {
       this.posts.push(...response);
 
-      for (let i = this.columnCount - 1; i >= 0; i--) {
-        this.columns[i] = this.posts.filter((_, x) => x % this.columnCount === i);
-      }
+      response.forEach((post: Post) => {
+        let index = this.getIndexToPopulate();
+
+        console.log(index);
+
+        let column = this.columns[index];
+        column.push(post);
+      });
     });
   }
 
-  private getShortestColumn(): PostColumnComponent[] {
-    return this.postColumns
-      .toArray()
-      .sort((x, y) => {
-        return x.getSourceHeight() - y.getSourceHeight();
-      });
+  private reset() {
+    this.viewIndex = 0;
+    this.posts = [];
+    this.columns = new Array<Post[]>(this.columnCount);
+
+    for (let i = 0; i < this.columnCount; i++) {
+      this.columns[i] = <Post[]>[];
+    } 
   }
+
+  private getIndexToPopulate(): number {
+    return this.columns.reduce((prev, _, curr) => {
+      return  this.getTotalHeight(this.columns[prev]) <= this.getTotalHeight(this.columns[curr]) ? prev : curr;
+    }, 0);
+  }
+
+  private getTotalHeight = (posts: Post[]): number => {
+    return posts.reduce((t, p) => t + p.getScaledHeight(this.targetWidth), 0);
+  };
 }

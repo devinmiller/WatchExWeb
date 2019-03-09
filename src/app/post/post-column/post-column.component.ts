@@ -17,15 +17,9 @@ export class PostColumnComponent implements OnInit {
   ngOnInit() {
   }
 
-  getSourceHeight(): number {
+  getHeight(): number {
     return this.postImages.reduce((total, postImage) => {
-      return postImage.sourceImage ? total + postImage.sourceImage.height : total;
-    }, 0);
-  }
-
-  getNativeHeight(): number {
-    return this.postImages.reduce((total, postImage) => {
-      return postImage.nativeImage ? total + postImage.nativeImage.nativeElement.height : total;
+      return postImage.clientImage ? total + postImage.clientImage.nativeElement.clientHeight : total;
     }, 0);
   }
 }
