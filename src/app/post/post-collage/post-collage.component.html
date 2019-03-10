@@ -6,7 +6,7 @@
         <span fxShow="true" fxShow.gt-sm="false">WEX</span>
       </div>
   
-      <mat-form-field [color]="primary" fxFlex="50">
+      <mat-form-field fxFlex="50">
           <input matInput #filter (keyup.enter)="applyFilter(filter.value)" type="text" />
           <button mat-button matSuffix mat-icon-button (click)="applyFilter(filter.value)"> 
             <mat-icon>search</mat-icon>
