@@ -1,1 +1,12 @@
-<img #image [src]="getPreview()" />
+<div class="post">
+    <img #image [src]="getPreview()" />
+
+    <div fxLayout="row" fxLayoutAlign="center center" class="title">
+        <span fxFlex="80">{{post.title}}</span>
+        <span class="link" fxFlex="20">
+            <a [href]="post.getLink()" target="_blank" mat-icon-button>
+                <mat-icon>launch</mat-icon>
+            </a>
+        </span>
+    </div>
+</div>

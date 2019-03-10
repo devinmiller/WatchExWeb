@@ -1,3 +1,25 @@
+.post {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+
+    .title {
+        background: rgba(0,0,0,.4);
+        bottom: 0;
+        color: #FFF;
+        font-size: 16px;
+        left: 0;
+        line-height: 16px;
+        padding: 10px;
+        position: absolute;
+        width: 100%;
+    }
+
+    .link {
+        text-align: center;
+    }
+}
+
 img {
     /* Just in case there are inline attributes */
     width: 100% !important;

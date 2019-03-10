@@ -13,7 +13,11 @@ export class Post {
     timestamp:Date;
     title:string;
 
-    images: Image[]
+    images: Image[];
+
+    getLink(): string {
+        return `https://www.reddit.com${this.permalink}`;
+    }
 
     getResolution = (targetWidth: number): Image => {
         let filteredImages = this.images

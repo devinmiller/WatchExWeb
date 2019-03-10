@@ -1,26 +1,32 @@
 <div>
-  <div fxLayout="row" fxLayoutAlign="center center">
-    <mat-form-field fxFlex="20">
-        <input matInput #filter (keyup.enter)="applyFilter(filter.value)" type="text" placeholder="Search Filter" />
-        <button mat-button matSuffix mat-icon-button (click)="applyFilter(filter.value)"> 
-          <mat-icon>search</mat-icon>
-        </button>
-        <button mat-button matSuffix mat-icon-button (click)="filter.value = ''; applyFilter();"> 
-          <mat-icon>close</mat-icon>
-        </button>
-    </mat-form-field>
+  <mat-toolbar>
+    <mat-toolbar-row>
+      <div class="title" fxFlex="25">
+        <span fxHide="true" fxShow.gt-sm="true">Watch Exchange</span>
+        <span fxShow="true" fxShow.gt-sm="false">WEX</span>
+      </div>
+  
+      <mat-form-field [color]="primary" fxFlex="50">
+          <input matInput #filter (keyup.enter)="applyFilter(filter.value)" type="text" />
+          <button mat-button matSuffix mat-icon-button (click)="applyFilter(filter.value)"> 
+            <mat-icon>search</mat-icon>
+          </button>
+          <button mat-button matSuffix mat-icon-button (click)="filter.value = ''; applyFilter();"> 
+            <mat-icon>close</mat-icon>
+          </button>
+      </mat-form-field>
+    </mat-toolbar-row>
+  </mat-toolbar>
+
+  <div class="photos" fxLayout="row" cdk-scrollable>
+    <div *ngFor="let column of columns" [fxFlex]="calcWidth()" fxLayout="column" fxLayoutAlign="none stretch" fxFill>
+        <app-post-column [posts]="column"></app-post-column>
+    </div>
   </div>
 
-
-    <div class="photos" fxLayout="row" cdk-scrollable>
-      <div *ngFor="let column of columns" fxFlex="33.33" fxLayout="column" fxLayoutAlign="none start">
-          <app-post-column [posts]="column"></app-post-column>
-      </div>
-    </div>
-
-    <div fxLayout="row" fxLayoutAlign="center center">
-        <button fxFlex="20" mat-button (click)="loadMore(filter.value)"> 
-          Load More
-        </button>
-    </div>
+  <div fxLayout="row" fxLayoutAlign="center center">
+      <button fxFlex="20" mat-button (click)="loadMore(filter.value)"> 
+        Load More
+      </button>
+  </div>
 </div>
