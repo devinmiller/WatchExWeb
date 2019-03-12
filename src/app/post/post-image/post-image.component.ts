@@ -17,8 +17,8 @@ export class PostImageComponent implements OnInit {
 
   ngOnInit() {
     let images = this.post.images
-      .filter(image => image.height <= 640)
-      .sort((x, y) => y.height - x.height);
+      .filter(image => image.width <= 640)
+      .sort((x, y) => y.width - x.width);
 
     if(images) {
       this.sourceImage = images[0];
