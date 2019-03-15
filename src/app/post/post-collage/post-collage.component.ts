@@ -1,11 +1,13 @@
-import { Component, OnInit, ViewChild, ViewChildren, QueryList } from '@angular/core';
-import { MatPaginator, PageEvent } from '@angular/material';
+import { Component, OnInit, ViewChild, ViewChildren, QueryList, NgZone, ElementRef } from '@angular/core';
+import { MatPaginator } from '@angular/material';
 import { Post } from '../../models';
 import { PostService } from '../post.service';
 import { ScrollDispatcher, CdkScrollable, ViewportRuler } from '@angular/cdk/overlay';
 import { PostImageComponent } from '../post-image/post-image.component';
 import { PostColumnComponent } from '../post-column/post-column.component';
 import { MediaObserver } from '@angular/flex-layout';
+import { debounce } from 'rxjs/operators';
+import { timer } from 'rxjs';
 
 @Component({
   selector: 'app-post-collage',
@@ -25,9 +27,12 @@ export class PostCollageComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(CdkScrollable) scrollable: CdkScrollable;
 
+  @ViewChild('filter') filter: ElementRef<HTMLInputElement>;
+
   @ViewChildren(PostColumnComponent) postColumns: QueryList<PostColumnComponent>
 
   constructor(
+    private zone: NgZone,
     private mediaObserver: MediaObserver,
     private scrollDispatcher: ScrollDispatcher,
     private viewportRuler: ViewportRuler,
@@ -57,10 +62,15 @@ export class PostCollageComponent implements OnInit {
       });
 
     this.scrollDispatcher.register(this.scrollable);
-    this.scrollDispatcher.scrolled().subscribe(event => {
-      // console.log(this.viewportRuler.getViewportSize());
-      // console.log(this.viewportRuler.getViewportRect());
-      // console.log(this.viewportRuler.getViewportScrollPosition());
+    this.scrollDispatcher.scrolled().pipe(debounce(() => timer(500))).subscribe(event => {
+      let totalheight = this.postColumns.reduce((p,c) => p + c.getHeight(), 0);
+      let averageHeight = Math.ceil(totalheight / this.columnCount);
+
+      let viewPort = this.viewportRuler.getViewportRect();
+
+      if(viewPort.bottom >= averageHeight * .65) {
+        this.zone.run(() => this.loadMore(this.filter.nativeElement.value));
+      }
     });
 
     this.applyFilter();

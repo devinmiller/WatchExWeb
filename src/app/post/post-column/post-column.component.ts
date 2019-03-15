@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChildren, QueryList } from '@angular/core';
+import { Component, OnInit, Input, ViewChildren, QueryList, OnChanges } from '@angular/core';
 import { Post } from 'src/app/models';
 import { PostImageComponent } from '../post-image/post-image.component';
 
