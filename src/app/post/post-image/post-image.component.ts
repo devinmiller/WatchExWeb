@@ -13,6 +13,8 @@ export class PostImageComponent implements OnInit {
 
   sourceImage: Image;
 
+  isLoaded: boolean = false;
+
   constructor() { }
 
   ngOnInit() {
@@ -25,11 +27,19 @@ export class PostImageComponent implements OnInit {
     }
   }
 
+  loaded = () => { 
+    this.isLoaded = true;
+   }
+
+  error = () => {
+    // fall back to placeholder if there is an error loading image
+    this.clientImage.nativeElement.src = 'https://via.placeholder.com/960.gif?text=No+Image';
+  }
+
   getPreview = () => {
-    
     return this.sourceImage ? 
       `https://cotbwexdata01.blob.core.windows.net/images/${this.post.id}_${this.post.redditId}_${this.sourceImage.imageType === 1 ? 'Resolution':'Source'}_${this.sourceImage.width}_X_${this.sourceImage.height}.jpg` :
-      'https://via.placeholder.com/640.gif?text=No+Image';
+      'https://via.placeholder.com/960.gif?text=No+Image';
   }
 
 }

@@ -1,12 +1,12 @@
 <div>
   <mat-toolbar>
-    <mat-toolbar-row>
-      <div class="title" fxFlex="25">
-        <span fxHide="true" fxShow.gt-sm="true">Watch Exchange</span>
-        <span fxShow="true" fxShow.gt-sm="false">WEX</span>
-      </div>
+    <mat-toolbar-row fxShow="true" fxShow.gt-sm="false">
+        <span class="title" fxLayoutAlign="center center" fxFlex="100" >Watch Exchange</span>
+    </mat-toolbar-row>
+    <mat-toolbar-row class="actions" ngClass.gt-sm="actions-gt-sm">
+      <span class="title" fxFlex.gt-sm="25" fxHide="true" fxShow.gt-sm="true">Watch Exchange</span>
   
-      <mat-form-field fxFlex="50">
+      <mat-form-field fxFlex.gt-sm="50" fxFlex="100">
           <input matInput #filter (keyup.enter)="applyFilter(filter.value)" type="text" />
           <button mat-button matSuffix mat-icon-button (click)="applyFilter(filter.value)"> 
             <mat-icon>search</mat-icon>
