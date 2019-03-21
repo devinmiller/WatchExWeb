@@ -1,11 +1,10 @@
 import { Component, OnInit, ViewChild, ViewChildren, QueryList, NgZone, ElementRef, OnDestroy } from '@angular/core';
-import { Location } from '@angular/common';
 import { Post } from '../../models';
 import { PostService } from '../post.service';
 import { ScrollDispatcher, CdkScrollable, ViewportRuler } from '@angular/cdk/overlay';
 import { PostColumnComponent } from '../post-column/post-column.component';
 import { MediaObserver } from '@angular/flex-layout';
-import { debounce, throttle } from 'rxjs/operators';
+import {  throttle } from 'rxjs/operators';
 import { timer, Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -37,7 +36,6 @@ export class PostCollageComponent implements OnInit, OnDestroy {
     private zone: NgZone,
     private router: Router,
     private route: ActivatedRoute,
-    private location: Location,
     private mediaObserver: MediaObserver,
     private scrollDispatcher: ScrollDispatcher,
     private viewportRuler: ViewportRuler,
@@ -49,9 +47,10 @@ export class PostCollageComponent implements OnInit, OnDestroy {
 
     this.route.paramMap
       .subscribe(params => {
-        this.filter.nativeElement.value = params.get('f');
+        let filter = params.get('f');
 
-        this.applyFilter(params.get('f'));
+        this.filter.nativeElement.value = filter;
+        this.loadImages(filter);
       });
   }
 
@@ -65,23 +64,16 @@ export class PostCollageComponent implements OnInit, OnDestroy {
   }
 
   applyFilter(value?: string) {
-    this.resetView();
-
-    let url: string;
     if(value) {
-      url = this.router.createUrlTree(
-        [{ f: value } ], 
-        { relativeTo: this.route })
-        .toString();
+      this.router.navigate(['/', value]);
     } else {
-      url = this.router.createUrlTree(
-        [{ /* clear */ }], 
-        { relativeTo: this.route })
-        .toString();
+      this.router.navigate(['/']);
     }
-    
-    this.location.go(url);
+  }
 
+  loadImages(value?: string) {
+    this.filter.nativeElement.blur();
+    this.resetView();
     this.getImages(value, this.viewIndex);
   }
 
