@@ -4,7 +4,7 @@ import { PostService } from '../post.service';
 import { ScrollDispatcher, CdkScrollable, ViewportRuler } from '@angular/cdk/overlay';
 import { PostColumnComponent } from '../post-column/post-column.component';
 import { MediaObserver } from '@angular/flex-layout';
-import {  throttle } from 'rxjs/operators';
+import {  throttle, finalize } from 'rxjs/operators';
 import { timer, Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -19,6 +19,9 @@ export class PostCollageComponent implements OnInit, OnDestroy {
   viewIndex = 0;
 
   targetWidth: number = 960;
+
+  hasMore: boolean =  true;
+  isLoading: boolean = false;
 
   columns: Array<Post[]>;
   columnCount: number = 3;
@@ -78,8 +81,10 @@ export class PostCollageComponent implements OnInit, OnDestroy {
   }
 
   loadMore(value?: string) {
-    this.viewIndex++;
-    this.getImages(value, this.viewIndex);
+    if(this.hasMore && !this.isLoading) {
+      this.viewIndex++;
+      this.getImages(value, this.viewIndex);
+    }
   }
 
   private getImages(value?: string, index?: number) {
@@ -88,15 +93,23 @@ export class PostCollageComponent implements OnInit, OnDestroy {
       page: index || 0
     };
 
-    this.postService.getPosts(search).subscribe(response => {
-      this.posts.push(...response);
+    this.isLoading = true;
 
-      response.forEach((post: Post) => {
-        let index = this.getIndexToPopulate();
-        let column = this.columns[index];
+    this.postService.getPosts(search)
+      .pipe(
+        finalize(() => this.isLoading = false)
+      )
+      .subscribe(response => {
+        this.hasMore = !(response.length < 20);
 
-        column.push(post);
-      });
+        this.posts.push(...response);
+
+        response.forEach((post: Post) => {
+          let index = this.getIndexToPopulate();
+          let column = this.columns[index];
+
+          column.push(post);
+        });
     });
   }
 
