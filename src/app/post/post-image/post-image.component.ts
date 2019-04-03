@@ -38,7 +38,7 @@ export class PostImageComponent implements OnInit {
 
   getPreview = () => {
     return this.sourceImage ? 
-      `https://cotbwexdata01.blob.core.windows.net/images/${this.post.id}_${this.post.redditId}_${this.sourceImage.imageType === 1 ? 'Resolution':'Source'}_${this.sourceImage.width}_X_${this.sourceImage.height}.jpg` :
+      `https://wex-img.codeonthebrain.com/${this.post.id}_${this.post.redditId}_${this.sourceImage.imageType === 1 ? 'Resolution':'Source'}_${this.sourceImage.width}_X_${this.sourceImage.height}.jpg` :
       'https://via.placeholder.com/960.gif?text=No+Image';
   }
 
