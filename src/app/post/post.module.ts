@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import {FlexLayoutModule} from '@angular/flex-layout';
-import { MatTableModule, MatInputModule, MatIconModule, MatButtonModule, MatPaginatorModule, MatToolbarModule } from '@angular/material';
+import { MatTableModule, MatInputModule, MatIconModule, MatButtonModule, MatPaginatorModule, MatToolbarModule, MatProgressSpinnerModule } from '@angular/material';
 
 import { PostRoutingModule } from './post-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -24,6 +24,7 @@ import { PostColumnComponent } from './post-column/post-column.component';
     MatInputModule,
     MatPaginatorModule,
     MatTableModule,
+    MatProgressSpinnerModule,
     PostRoutingModule,
     ScrollingModule,
     ScrollDispatchModule

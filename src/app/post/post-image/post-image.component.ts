@@ -37,9 +37,15 @@ export class PostImageComponent implements OnInit {
   }
 
   getPreview = () => {
-    return this.sourceImage ? 
-      `https://wex-img.codeonthebrain.com/${this.post.id}_${this.post.redditId}_${this.sourceImage.imageType === 1 ? 'Resolution':'Source'}_${this.sourceImage.width}_X_${this.sourceImage.height}.jpg` :
-      'https://via.placeholder.com/960.gif?text=No+Image';
-  }
+    if(this.sourceImage) {
+      let {id, redditId} = this.post;
+      let {imageType, width, height} = this.sourceImage;
 
+      this.clientImage.nativeElement.height = height;
+
+      return `https://wex-img.codeonthebrain.com/${id}_${redditId}_${imageType === 1 ? 'Resolution':'Source'}_${width}_X_${height}.jpg`
+    } else {
+      return 'https://via.placeholder.com/960.gif?text=No+Image';
+    }
+  }
 }

@@ -24,9 +24,20 @@
     </div>
   </div>
 
-  <div fxLayout="row" fxLayoutAlign="center center">
-      <button fxFlex="20" mat-button (click)="loadMore(filter.value)"> 
-        Load More
-      </button>
+  <div class="footer" fxLayout="row" fxLayoutAlign="center center">
+      <div *ngIf=isLoading>
+        <mat-progress-spinner
+          color="primary"
+          mode="indeterminate"
+          [diameter]="32">
+        </mat-progress-spinner>
+      </div>
+      <div *ngIf="!hasMore">No More Results</div>
+      <button 
+        fxFlex="20"
+        mat-stroked-button 
+        color="primary"
+        *ngIf="hasMore && !isLoading"  
+        (click)="loadMore(filter.value)">Load More</button>
   </div>
 </div>
