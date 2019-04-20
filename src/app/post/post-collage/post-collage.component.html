@@ -34,7 +34,9 @@
       </div>
       <div *ngIf="!hasMore">No More Results</div>
       <button 
-        fxFlex="20"
+        fxFlex.gt-sm="20"
+        fxFlex.sm="40"
+        fxFlex.xs="60"
         mat-stroked-button 
         color="primary"
         *ngIf="hasMore && !isLoading"  

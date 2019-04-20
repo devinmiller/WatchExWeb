@@ -41,7 +41,7 @@ export class PostImageComponent implements OnInit {
       let {id, redditId} = this.post;
       let {imageType, width, height} = this.sourceImage;
 
-      this.clientImage.nativeElement.height = height;
+      //this.clientImage.nativeElement.height = height;
 
       return `https://wex-img.codeonthebrain.com/${id}_${redditId}_${imageType === 1 ? 'Resolution':'Source'}_${width}_X_${height}.jpg`
     } else {
