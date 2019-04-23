@@ -7,10 +7,12 @@ import { AppComponent } from './app.component';
 import { PostModule } from './post/post.module';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { AdminComponent } from './admin/admin.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    AdminComponent
   ],
   imports: [
     BrowserModule,
