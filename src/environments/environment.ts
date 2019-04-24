@@ -4,7 +4,12 @@
 
 export const environment = {
   production: false,
-  searchUrl: 'https://wex-api.codeonthebrain.com/api/post'
+  searchUrl: 'https://wex-api.codeonthebrain.com/api/post',
+  authentication: {
+    authority: 'http://localhost:5000/',
+    redirectUri: 'http://localhost:4200/auth/callback',
+    logoutUri: 'http://localhost:4200/'
+  }
 };
 
 /*
