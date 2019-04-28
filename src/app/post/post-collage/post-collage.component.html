@@ -3,12 +3,13 @@
     <mat-toolbar-row fxShow="true" fxShow.gt-sm="false">
         <span class="title" fxLayoutAlign="center center" fxFlex="100" >Watch Exchange</span>
     </mat-toolbar-row>
-    <mat-toolbar-row class="actions" ngClass.gt-sm="actions-gt-sm">
-      <span class="title" fxFlex.gt-sm="25" fxHide="true" fxShow.gt-sm="true">Watch Exchange</span>
+
+    <mat-toolbar-row fxHide="true" fxShow.gt-sm="true">
+      <span class="title" fxFlex="25" fxHide="true" fxShow.gt-sm="true">Watch Exchange</span>
   
-      <mat-form-field fxFlex.gt-sm="50" fxFlex="100">
-          <input matInput #filter (keyup.enter)="applyFilter(filter.value)" type="text" />
-          <button mat-button matSuffix mat-icon-button (click)="applyFilter(filter.value)"> 
+      <mat-form-field fxFlex="50">
+          <input matInput [(ngModel)]="filter" #model="ngModel" (keyup.enter)="applyFilter(model.value)" type="text" />
+          <button mat-button matSuffix mat-icon-button (click)="applyFilter(model.value)"> 
             <mat-icon>search</mat-icon>
           </button>
           <button mat-button matSuffix mat-icon-button (click)="applyFilter()"> 
@@ -18,9 +19,24 @@
     </mat-toolbar-row>
   </mat-toolbar>
 
-  <div class="photos" fxLayout="row" cdk-scrollable>
-    <div *ngFor="let column of columns" [fxFlex]="calcWidth()" fxLayout="column" fxLayoutAlign="none stretch" fxFill>
-        <app-post-column [posts]="column"></app-post-column>
+  <div class="photos" fxLayout="column" cdk-scrollable>
+    <mat-toolbar fxShow="true" fxShow.gt-sm="false">
+      <mat-toolbar-row>
+          <mat-form-field fxFlex="100">
+              <input matInput [(ngModel)]="filter" #model="ngModel" (keyup.enter)="applyFilter(model.value)" type="text" />
+              <button mat-button matSuffix mat-icon-button (click)="applyFilter(model.value)"> 
+                <mat-icon>search</mat-icon>
+              </button>
+              <button mat-button matSuffix mat-icon-button (click)="applyFilter()"> 
+                <mat-icon>close</mat-icon>
+              </button>
+          </mat-form-field>
+        </mat-toolbar-row>
+    </mat-toolbar>
+    <div fxLayout="row">
+      <div *ngFor="let column of columns" [fxFlex]="calcWidth()" fxLayout="column" fxLayoutAlign="none stretch" fxFill>
+          <app-post-column [posts]="column"></app-post-column>
+      </div>
     </div>
   </div>
 

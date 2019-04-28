@@ -26,10 +26,9 @@ export class PostCollageComponent implements OnInit, OnDestroy {
   columns: Array<Post[]>;
   columnCount: number = 3;
 
+  filter:string = '';
+
   @ViewChild(CdkScrollable) scrollable: CdkScrollable;
-
-  @ViewChild('filter') filter: ElementRef<HTMLInputElement>;
-
   @ViewChildren(PostColumnComponent) postColumns: QueryList<PostColumnComponent>
 
   mediaSubscription: Subscription;
@@ -52,7 +51,8 @@ export class PostCollageComponent implements OnInit, OnDestroy {
       .subscribe(params => {
         let filter = params.get('f');
 
-        this.filter.nativeElement.value = filter;
+        this.filter = filter;
+
         this.loadImages(filter);
       });
   }
@@ -75,7 +75,6 @@ export class PostCollageComponent implements OnInit, OnDestroy {
   }
 
   loadImages(value?: string) {
-    this.filter.nativeElement.blur();
     this.resetView();
     this.getImages(value, this.viewIndex);
   }
@@ -149,7 +148,7 @@ export class PostCollageComponent implements OnInit, OnDestroy {
         let viewPort = this.viewportRuler.getViewportRect();
 
         if(viewPort.bottom >= averageHeight * .65) {
-          this.zone.run(() => this.loadMore(this.filter.nativeElement.value));
+          this.zone.run(() => this.loadMore(this.filter));
         }
       });
   }

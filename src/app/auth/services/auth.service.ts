@@ -16,7 +16,7 @@ export class AuthService {
     });
    }
 
-   isLoggedIn(): boolean {
+  isLoggedIn(): boolean {
     return this.user != null && !this.user.expired;
   }
 
@@ -24,10 +24,9 @@ export class AuthService {
     return this.manager.signinRedirect();
   }
 
-  finishLogin(): Promise<void> {
-    return this.manager.signinRedirectCallback().then(user => {
-      this.user = user;
-    });
+  async finishLogin(): Promise<void> {
+    const user = await this.manager.signinRedirectCallback();
+    this.user = user;
   }
 }
 

@@ -1,10 +1,27 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { trigger, state, style, animate, transition } from '@angular/animations';
 import { Post, Image } from 'src/app/models';
 
 @Component({
   selector: 'app-post-image',
   templateUrl: './post-image.component.html',
-  styleUrls: ['./post-image.component.scss']
+  styleUrls: ['./post-image.component.scss'],
+  animations: [
+    trigger('display', [
+      state('hidden', style({
+        opacity: 0
+      })),
+      state('visible', style({
+        opacity: 1
+      })),
+      transition('hidden => visible', [
+        animate('1s')
+      ]),
+      transition('visible => hidden', [
+        animate('1s')
+      ]),
+    ])
+  ]
 })
 export class PostImageComponent implements OnInit {
   @Input() post: Post;

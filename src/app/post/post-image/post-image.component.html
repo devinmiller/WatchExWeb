@@ -1,4 +1,4 @@
-<div class="post">
+<div [@display]="isLoaded ? 'visible' : 'hidden'" class="post">
     <img #image [src]="getPreview()" (load)="loaded()" (error)="error()" />
 
     <div *ngIf="isLoaded" fxLayout="row" fxLayoutAlign="center center" class="title">

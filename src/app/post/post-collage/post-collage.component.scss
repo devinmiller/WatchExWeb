@@ -1,6 +1,11 @@
 .photos {
     line-height: 0;
     
+    mat-toolbar {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+    }
 }
 
 .title {
